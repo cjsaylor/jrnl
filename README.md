@@ -4,6 +4,10 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 
 ![](jrnl.gif)
 
+---
+
+[View an example wiki journal](https://github.com/cjsaylor/jrnl/wiki)
+
 * [Quick Start](#quick-start)
 * [Requirements](#requirements)
 * [Options](#options)

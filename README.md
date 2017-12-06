@@ -103,3 +103,5 @@ If you need to open or add an image to a different day's entry, you can use the 
 ```bash
 jrnl -date 2017-12-05 open
 ```
+
+Additionally, certain commands like `open` and `image` support a subject `-s` flag which allows you to name the file anything you want.

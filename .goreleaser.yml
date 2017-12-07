@@ -6,3 +6,14 @@ builds:
       - linux
     goarch:
       - amd64
+
+brew:
+  github:
+    owner: cjsaylor
+    name: homebrew-jrnl
+  commit_author:
+    name: cjsaylor
+    email: cjsaylor@gmail.com
+  description: "Quick and easy CLI journaling tool for Github wiki journals."
+  dependencies:
+    - git

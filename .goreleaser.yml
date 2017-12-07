@@ -18,3 +18,6 @@ brew:
   description: "Quick and easy CLI journaling tool for Github wiki journals."
   dependencies:
     - git
+
+release:
+  prerelease: true

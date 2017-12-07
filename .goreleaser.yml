@@ -10,7 +10,8 @@ builds:
 brew:
   github:
     owner: cjsaylor
-    name: homebrew-jrnl
+    name: homebrew-tap
+  folder: Formula
   commit_author:
     name: cjsaylor
     email: cjsaylor@gmail.com

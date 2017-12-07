@@ -8,8 +8,11 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 
 [View an example wiki journal](https://github.com/cjsaylor/jrnl/wiki)
 
+---
+
 * [Quick Start](#quick-start)
 * [Requirements](#requirements)
+* [Installation](#installation)
 * [Options](#options)
 * [Generate Index](#index)
 * [Append Images](#append-an-image)
@@ -33,7 +36,6 @@ Quickly drop into the editor of your choice (default `vim` but configurable via 
 
 ```bash
 jrnl
-# or jrnl open
 ```
 
 Write your entry and then "memorize":
@@ -46,6 +48,18 @@ jrnl memorize
 
 * Git
 * Github account (and access to a repo for the wiki)
+
+## Installation
+
+### MacOS
+
+```bash
+brew install cjsaylor/tap/jrnl
+```
+
+### Windows & Linux
+
+Download the binary from the [latest release](https://github.com/cjsaylor/jrnl/releases/latest)
 
 ## Options
 

@@ -22,6 +22,8 @@ var availableCommands = map[string]string{
 	"image":    "  Append an image to the current journal entry.",
 }
 
+var version = "dev"
+
 func init() {
 	config = commands.Configuration{}
 	env.Parse(&config)
@@ -59,7 +61,13 @@ func fromCommandName(name string) (commands.CommandRunner, error) {
 func main() {
 	now := time.Now()
 	dateInput := flag.String("date", now.Format("2006-01-02"), "Specify the date of entry.")
+	versionRequested := flag.Bool("version", false, "Prints the current version.")
 	flag.Parse()
+
+	if *versionRequested {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 
 	parsedDate, err := time.Parse("2006-01-02", *dateInput)
 	if err != nil {

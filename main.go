@@ -15,11 +15,12 @@ import (
 var config commands.Configuration
 
 var availableCommands = map[string]string{
-	"open":     "    Open a journal entry in configured editor.",
-	"memorize": "Commit all journal entries.",
-	"sync":     "    Syncronize journal entries from source.",
-	"index":    "   Write index file based on frontmatter tags.",
-	"image":    "  Append an image to the current journal entry.",
+	"open":      "     Open a journal entry in configured editor.",
+	"memorize":  " Commit all journal entries.",
+	"sync":      "     Syncronize journal entries from source.",
+	"index":     "    Write index file based on frontmatter tags.",
+	"image":     "    Append an image to the current journal entry.",
+	"list-tags": "List all tags used in journal entries.",
 }
 
 var version = "dev"
@@ -53,6 +54,8 @@ func fromCommandName(name string) (commands.CommandRunner, error) {
 		return commands.NewIndexCommand(config), nil
 	case "image":
 		return commands.NewImageCommand(config), nil
+	case "list-tags":
+		return commands.NewListTagsCommand(config), nil
 	default:
 		return nil, errors.New("Command not found")
 	}

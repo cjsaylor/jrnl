@@ -6,6 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 	"time"
 
 	"github.com/caarlos0/env"
@@ -15,15 +17,25 @@ import (
 var config commands.Configuration
 
 var availableCommands = map[string]string{
-	"open":      "     Open a journal entry in configured editor.",
-	"memorize":  " Commit all journal entries.",
-	"sync":      "     Syncronize journal entries from source.",
-	"index":     "    Write index file based on frontmatter tags.",
-	"image":     "    Append an image to the current journal entry.",
+	"open":      "Open a journal entry in configured editor.",
+	"memorize":  "Commit all journal entries.",
+	"sync":      "Syncronize journal entries from source.",
+	"index":     "Write index file based on frontmatter tags.",
+	"image":     "Append an image to the current journal entry.",
 	"list-tags": "List all tags used in journal entries.",
 }
 
 var version = "dev"
+
+func longestStringLength(strings []string) int {
+	length := 0
+	for _, v := range strings {
+		if len(v) > length {
+			length = len(v)
+		}
+	}
+	return length
+}
 
 func init() {
 	config = commands.Configuration{}
@@ -34,8 +46,15 @@ func init() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: jrnl [options...] [command]\n\n")
 		fmt.Fprintf(os.Stderr, "Commands:\n\n")
-		for key, description := range availableCommands {
-			fmt.Fprintf(os.Stderr, "%s %s\n", key, description)
+		var keys []string
+		for key := range availableCommands {
+			keys = append(keys, key)
+		}
+		maxLength := longestStringLength(keys)
+		sort.Strings(keys)
+		for _, command := range keys {
+			keyPadding := strings.Repeat(" ", maxLength+1)
+			fmt.Fprintf(os.Stderr, "%s %s\n", command+keyPadding[len(command):], availableCommands[command])
 		}
 		fmt.Fprintf(os.Stderr, "\nOptions:\n")
 		flag.PrintDefaults()

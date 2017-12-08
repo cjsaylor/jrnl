@@ -25,6 +25,6 @@ func (l *ListTagsCommand) Run(ctd context.Context, subcommandArgs []string) {
 	}
 	tags := sortedTagKeys(index)
 	for _, tag := range tags {
-		fmt.Fprintf(os.Stdout, "\t* %s\n", tag)
+		fmt.Fprintf(os.Stdout, "%s\n", tag)
 	}
 }

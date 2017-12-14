@@ -3,12 +3,13 @@
 A quick and easy CLI journaling tool that uses Github Wiki repos for organizing journal entries.
 
 ![](jrnl.gif)
-
 ---
 
 [View an example wiki journal](https://github.com/cjsaylor/jrnl/wiki)
 
 ---
+
+[![GoDoc](https://godoc.org/github.com/cjsaylor/jrnl?status.svg)](https://godoc.org/github.com/cjsaylor/jrnl)
 
 * [Quick Start](#quick-start)
 * [Requirements](#requirements)

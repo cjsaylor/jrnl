@@ -9,6 +9,7 @@ import (
 	"path"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/ericaro/frontmatter"
 )
@@ -19,8 +20,34 @@ type IndexCommand struct {
 }
 
 type entryHeader struct {
-	Tags    []string `yaml:"tags"`
-	Content string   `fm:"content" yaml:"-"`
+	Filename string
+	Tags     []string `yaml:"tags"`
+	Content  string   `fm:"content" yaml:"-"`
+}
+
+type frontmatterResult struct {
+	header *entryHeader
+	err    error
+}
+
+func readFrontmatter(filePath string, results chan<- frontmatterResult, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	content, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		results <- frontmatterResult{
+			header: nil,
+			err:    err,
+		}
+		return
+	}
+	head := new(entryHeader)
+	frontmatter.Unmarshal(content, head)
+	head.Filename = path.Base(filePath)
+	results <- frontmatterResult{
+		header: head,
+		err:    nil,
+	}
 }
 
 func tagMap(journalPath string) (map[string][]string, error) {
@@ -30,15 +57,20 @@ func tagMap(journalPath string) (map[string][]string, error) {
 		return nil, err
 	}
 	index := make(map[string][]string)
+	results := make(chan frontmatterResult, len(files))
+	var wg sync.WaitGroup
 	for _, file := range files {
-		content, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", directory, file.Name()))
-		if err != nil {
-			return nil, err
+		wg.Add(1)
+		go readFrontmatter(fmt.Sprintf("%s/%s", directory, file.Name()), results, &wg)
+	}
+	wg.Wait()
+	close(results)
+	for result := range results {
+		if result.err != nil {
+			return nil, result.err
 		}
-		head := new(entryHeader)
-		frontmatter.Unmarshal(content, head)
-		for _, tag := range head.Tags {
-			index[tag] = append(index[tag], strings.TrimSuffix(file.Name(), ".md"))
+		for _, tag := range result.header.Tags {
+			index[tag] = append(index[tag], strings.TrimSuffix(result.header.Filename, ".md"))
 		}
 	}
 	return index, nil

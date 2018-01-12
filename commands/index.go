@@ -30,9 +30,7 @@ type frontmatterResult struct {
 	err    error
 }
 
-func readFrontmatter(filePath string, results chan<- frontmatterResult, wg *sync.WaitGroup) {
-	defer wg.Done()
-
+func readFrontmatter(filePath string, results chan<- frontmatterResult) {
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		results <- frontmatterResult{
@@ -61,7 +59,10 @@ func tagMap(journalPath string) (map[string][]string, error) {
 	var wg sync.WaitGroup
 	for _, file := range files {
 		wg.Add(1)
-		go readFrontmatter(fmt.Sprintf("%s/%s", directory, file.Name()), results, &wg)
+		go func(filePath string) {
+			defer wg.Done()
+			readFrontmatter(filePath, results)
+		}(fmt.Sprintf("%s/%s", directory, file.Name()))
 	}
 	wg.Wait()
 	close(results)

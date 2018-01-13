@@ -18,6 +18,7 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 * [Generate Index](#index)
 * [Append Images](#append-an-image)
 * [Operate on a different date](#operate-on-a-different-date)
+* [Use `find` command to create a book](#use-find-command-to-create-a-book)
 
 ## Quick start
 
@@ -120,3 +121,11 @@ jrnl -date 2017-12-05 open
 ```
 
 Additionally, certain commands like `open` and `image` support a subject `-s` flag which allows you to name the file anything you want.
+
+## Use Find Command to Create a Book
+
+You can use the `find` command (as of `v0.3.0`) to create a single document of all journal entries related to a tag (or tags):
+
+```bash
+jrnl find --tag sometag --tag somerelatedtag | xargs cat > sometag.md
+```

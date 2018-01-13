@@ -74,6 +74,9 @@ func tagMap(journalPath string) (map[string][]string, error) {
 			index[tag] = append(index[tag], strings.TrimSuffix(result.header.Filename, ".md"))
 		}
 	}
+	for tag := range index {
+		sort.Strings(index[tag])
+	}
 	return index, nil
 }
 

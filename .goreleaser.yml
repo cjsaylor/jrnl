@@ -1,5 +1,6 @@
 builds:
-  - binary: jrnl
+  - main: ./cmd/cli/main.go
+    binary: jrnl
     goos:
       - windows
       - darwin

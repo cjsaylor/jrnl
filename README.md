@@ -19,6 +19,7 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 * [Append Images](#append-an-image)
 * [Operate on a different date](#operate-on-a-different-date)
 * [Use `find` command to create a book](#use-find-command-to-create-a-book)
+* [Development](#development)
 
 ## Quick start
 
@@ -129,3 +130,15 @@ You can use the `find` command (as of `v0.3.0`) to create a single document of a
 ```bash
 jrnl find --tag sometag --tag somerelatedtag | xargs cat > sometag.md
 ```
+
+## Development
+
+To compile the CLI tool:
+
+```bash
+go build -o jrnl cmd/cli/main.go
+```
+
+To add a dependency use the [`dep` tool](https://github.com/golang/dep)
+
+For distribution, the [`goreleaser` tool](https://goreleaser.com/) is used. Simply run `goreleaser` to tag and distribute.

@@ -11,9 +11,9 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 
 [![GoDoc](https://godoc.org/github.com/cjsaylor/jrnl?status.svg)](https://godoc.org/github.com/cjsaylor/jrnl)
 
-* [Quick Start](#quick-start)
 * [Requirements](#requirements)
 * [Installation](#installation)
+* [Quick Start](#quick-start)
 * [Options](#options)
 * [Commands](#commands)
 	* [Tag Journal Entries](#tag)
@@ -23,32 +23,6 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 	* [Use `find` command to create a book](#use-find-command-to-create-a-book)
 	* [Use `find` and `tag` commands to add a common tag](#use-find-and-tag-commands-to-add-a-common-tag)
 * [Development](#development)
-
-## Quick start
-
-Install `jrnl`:
-
-```bash
-go get -u github.com/cjsaylor/jrnl/cmd/cli
-```
-
-Clone a github wiki you want to act as the store of your journal:
-
-```bash
-git clone https://github.com/<yourname>/<journel_repo>.wiki.git ~/journal.wiki
-```
-
-Quickly drop into the editor of your choice (default `vim` but configurable via `$JRNL_EDITOR`):
-
-```bash
-jrnl
-```
-
-Write your entry and then "memorize":
-
-```bash
-jrnl memorize
-```
 
 ## Requirements
 
@@ -70,7 +44,33 @@ Download the binary from the [latest release](https://github.com/cjsaylor/jrnl/r
 ### Compiling from source
 
 ```bash
-go get -u github.com/cjsaylor/jrnl/cmd/cli
+go get -u github.com/cjsaylor/jrnl/cmd/jrnl
+```
+
+## Quick start
+
+[Install `jrnl`](#installation)
+
+```bash
+go get -u github.com/cjsaylor/jrnl/cmd/jrnl
+```
+
+Clone a github wiki you want to act as the store of your journal:
+
+```bash
+git clone https://github.com/<yourname>/<journel_repo>.wiki.git ~/journal.wiki
+```
+
+Quickly drop into the editor of your choice (default `vim` but configurable via `$JRNL_EDITOR`):
+
+```bash
+jrnl
+```
+
+Write your entry and then "memorize":
+
+```bash
+jrnl memorize
 ```
 
 ## Options

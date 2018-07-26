@@ -1,5 +1,5 @@
 builds:
-  - main: ./cmd/cli/main.go
+  - main: ./cmd/jrnl/main.go
     binary: jrnl
     goos:
       - windows

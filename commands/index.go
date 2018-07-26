@@ -10,42 +10,11 @@ import (
 	"sort"
 	"strings"
 	"sync"
-
-	"github.com/ericaro/frontmatter"
 )
 
 type IndexCommand struct {
 	options Configuration
 	flags   *flag.FlagSet
-}
-
-type entryHeader struct {
-	Filename string
-	Tags     []string `yaml:"tags"`
-	Content  string   `fm:"content" yaml:"-"`
-}
-
-type frontmatterResult struct {
-	header *entryHeader
-	err    error
-}
-
-func readFrontmatter(filePath string, results chan<- frontmatterResult) {
-	content, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		results <- frontmatterResult{
-			header: nil,
-			err:    err,
-		}
-		return
-	}
-	head := new(entryHeader)
-	frontmatter.Unmarshal(content, head)
-	head.Filename = path.Base(filePath)
-	results <- frontmatterResult{
-		header: head,
-		err:    nil,
-	}
 }
 
 func tagMap(journalPath string) (map[string][]string, error) {

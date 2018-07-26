@@ -24,6 +24,7 @@ var availableCommands = map[string]string{
 	"image":     "Append an image to the current journal entry.",
 	"list-tags": "List all tags used in journal entries.",
 	"find":      "Find journal entries.",
+	"tag":       "Append a tag or tags to journal entries.",
 }
 
 var version = "dev"
@@ -78,6 +79,8 @@ func fromCommandName(name string) (commands.CommandRunner, error) {
 		return commands.NewListTagsCommand(config), nil
 	case "find":
 		return commands.NewFindCommand(config), nil
+	case "tag":
+		return commands.NewTagCommand(config), nil
 	default:
 		return nil, errors.New("Command not found")
 	}

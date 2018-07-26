@@ -29,7 +29,7 @@ A quick and easy CLI journaling tool that uses Github Wiki repos for organizing 
 Install `jrnl`:
 
 ```bash
-go get github.com/cjsaylor/jrnl
+go get -u github.com/cjsaylor/jrnl/cmd/cli
 ```
 
 Clone a github wiki you want to act as the store of your journal:
@@ -66,6 +66,12 @@ brew install cjsaylor/tap/jrnl
 ### Windows & Linux
 
 Download the binary from the [latest release](https://github.com/cjsaylor/jrnl/releases/latest)
+
+### Compiling from source
+
+```bash
+go get -u github.com/cjsaylor/jrnl/cmd/cli
+```
 
 ## Options
 

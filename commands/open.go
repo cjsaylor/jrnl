@@ -65,10 +65,12 @@ func generateFrontmatter(ctx context.Context) ([]byte, error) {
 }
 
 // Run the open command
-func (o *OpenCommand) Run(ctx context.Context, subcommandArgs []string) {
+func (o *OpenCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	subjectFlag := o.flags.String("s", "", "Set the subject (this will not use a journal date.")
 	if !o.flags.Parsed() {
-		o.flags.Parse(subcommandArgs)
+		if err := o.flags.Parse(subcommandArgs); err != nil {
+			return err
+		}
 	}
 	var filename string
 	if *subjectFlag != "" {
@@ -86,18 +88,12 @@ func (o *OpenCommand) Run(ctx context.Context, subcommandArgs []string) {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		content, err := generateFrontmatter(ctx)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
+			return err
 		}
 		if err = o.fileProducer.InitializeEntry(filePath, content); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(2)
+			return err
 		}
 	}
 
-	err := o.editorSpawner.OpenEditor(o.options.JournalEditor, options...)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(3)
-	}
+	return o.editorSpawner.OpenEditor(o.options.JournalEditor, options...)
 }

@@ -44,7 +44,9 @@ func TestFileCreatedOnStartup(t *testing.T) {
 	producer := fakeProducer{}
 	editor := fakeEditor{}
 	cmd := commands.NewOpenCommand(config, &producer, &editor)
-	cmd.Run(ctx, []string{})
+	if err := cmd.Run(ctx, []string{}); err != nil {
+		t.Error(err)
+	}
 	// Check that the initialized file is called with correct content
 	if len(called["ensure"]) == 0 {
 		t.Error("Expected EnsureDirectory to be called.")

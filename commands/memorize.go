@@ -2,8 +2,7 @@ package commands
 
 import (
 	"context"
-	"fmt"
-	"os"
+	"errors"
 )
 
 type MemorizeCommand struct {
@@ -19,7 +18,7 @@ func NewMemorizeCommand(config Configuration) *MemorizeCommand {
 }
 
 // Run the memorize command
-func (m *MemorizeCommand) Run(ctx context.Context, subcommandArgs []string) {
+func (m *MemorizeCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	params := []string{
 		"-C",
 		m.options.JournalPath,
@@ -32,8 +31,7 @@ func (m *MemorizeCommand) Run(ctx context.Context, subcommandArgs []string) {
 		case 128:
 			break
 		default:
-			fmt.Fprintln(os.Stderr, "Failed to stage journal entries.")
-			os.Exit(4)
+			return errors.New("failed to stage journal entries")
 		}
 	}
 
@@ -50,8 +48,7 @@ func (m *MemorizeCommand) Run(ctx context.Context, subcommandArgs []string) {
 		case 128:
 			break
 		default:
-			fmt.Fprintln(os.Stderr, "Failed to commit journal.")
-			os.Exit(3)
+			return errors.New("failed to commit journal")
 		}
 	}
 
@@ -68,8 +65,8 @@ func (m *MemorizeCommand) Run(ctx context.Context, subcommandArgs []string) {
 		case 128:
 			break
 		default:
-			fmt.Fprintln(os.Stderr, "Failed to sync journal.")
-			os.Exit(4)
+			return errors.New("failed to sync journal")
 		}
 	}
+	return nil
 }

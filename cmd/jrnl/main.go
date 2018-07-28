@@ -121,5 +121,8 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	cmd.Run(ctx, commandArgs)
+	if err := cmd.Run(ctx, commandArgs); err != nil {
+		fmt.Fprintf(os.Stderr, "%v error: %v.\n", command, err)
+		os.Exit(2)
+	}
 }

@@ -17,14 +17,14 @@ func NewListTagsCommand(config Configuration) *ListTagsCommand {
 }
 
 // Run the list-tags command
-func (l *ListTagsCommand) Run(ctd context.Context, subcommandArgs []string) {
+func (l *ListTagsCommand) Run(ctd context.Context, subcommandArgs []string) error {
 	index, err := tagMap(l.options.JournalPath)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 	tags := sortedTagKeys(index)
 	for _, tag := range tags {
 		fmt.Fprintf(os.Stdout, "%s\n", tag)
 	}
+	return nil
 }

@@ -2,8 +2,7 @@ package commands
 
 import (
 	"context"
-	"fmt"
-	"os"
+	"errors"
 )
 
 type SyncCommand struct {
@@ -19,14 +18,14 @@ func NewSyncCommand(config Configuration) *SyncCommand {
 }
 
 // Run the sync command
-func (s *SyncCommand) Run(ctx context.Context, subcommandArgs []string) {
+func (s *SyncCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	params := []string{
 		"-C",
 		s.options.JournalPath,
 		"pull",
 	}
 	if code := gitCommand(params...); code != 0 {
-		fmt.Fprintln(os.Stderr, "Failed to sync journal.")
-		os.Exit(5)
+		return errors.New("failed to sync journal")
 	}
+	return nil
 }

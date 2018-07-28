@@ -26,7 +26,7 @@ func NewTagCommand(config Configuration) *TagCommand {
 }
 
 // Run the tag command
-func (t *TagCommand) Run(ctx context.Context, subcommandArgs []string) {
+func (t *TagCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	var files arrayFlags
 	var subjects arrayFlags
 	var tags arrayFlags
@@ -36,7 +36,9 @@ func (t *TagCommand) Run(ctx context.Context, subcommandArgs []string) {
 	t.flags.Var(&dates, "d", "Specify the date(s) of entry.")
 	t.flags.Var(&tags, "t", "Tag or tags to append to specified files, subjects, or dates")
 	if !t.flags.Parsed() {
-		t.flags.Parse(subcommandArgs)
+		if err := t.flags.Parse(subcommandArgs); err != nil {
+			return err
+		}
 	}
 	var fileEntries []string
 	for _, file := range files {
@@ -48,8 +50,7 @@ func (t *TagCommand) Run(ctx context.Context, subcommandArgs []string) {
 	for _, date := range dates {
 		parsedDate, err := time.Parse("2006-01-02", date)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return err
 		}
 		fileEntries = append(fileEntries, fmt.Sprintf("%s/entries/%s.md", t.options.JournalPath, parsedDate.String()))
 	}
@@ -69,24 +70,23 @@ func (t *TagCommand) Run(ctx context.Context, subcommandArgs []string) {
 	}
 	wg.Wait()
 	close(results)
+	// @todo Make this async for performance after certain len()
 	for result := range results {
 		if result.err != nil {
-			fmt.Println(result.err)
-			os.Exit(2)
+			return result.err
 		}
 		result.header.Tags = dedupe(append(result.header.Tags, tags...))
 		sort.Strings(result.header.Tags)
 		output, err := result.header.MarshalFrontmatter()
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(3)
+			return err
 		}
 		err = ioutil.WriteFile(result.header.Filepath, output, 0644)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(4)
+			return err
 		}
 	}
+	return nil
 }
 
 func dedupe(subject []string) []string {

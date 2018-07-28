@@ -13,7 +13,7 @@ import (
 
 // CommandRunner is an interface for runnable commands
 type CommandRunner interface {
-	Run(context.Context, []string)
+	Run(context.Context, []string) error
 }
 
 // CommandContextKey is a context key specific to commands package

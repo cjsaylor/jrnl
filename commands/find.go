@@ -35,16 +35,17 @@ func NewFindCommand(config Configuration) *FindCommand {
 }
 
 // Run the list-tags command
-func (f *FindCommand) Run(ctx context.Context, subcommandArgs []string) {
+func (f *FindCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	var tags arrayFlags
 	f.flags.Var(&tags, "tag", "Find entries of a specific tag or tags.")
 	if !f.flags.Parsed() {
-		f.flags.Parse(subcommandArgs)
+		if err := f.flags.Parse(subcommandArgs); err != nil {
+			return err
+		}
 	}
 	index, err := tagMap(f.options.JournalPath)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 	seen := make(map[string]bool)
 	for _, tag := range tags {
@@ -62,4 +63,5 @@ func (f *FindCommand) Run(ctx context.Context, subcommandArgs []string) {
 	}
 	sort.Strings(output)
 	fmt.Fprintln(os.Stdout, strings.Join(output, "\n"))
+	return nil
 }

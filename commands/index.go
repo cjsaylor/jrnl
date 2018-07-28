@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path"
 	"sort"
 	"strings"
@@ -68,18 +67,19 @@ func NewIndexCommand(config Configuration) *IndexCommand {
 }
 
 // Run the index command
-func (i *IndexCommand) Run(ctx context.Context, subcommandArgs []string) {
+func (i *IndexCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	outputPath := i.flags.String("o", "Index.md", "Output path contained to the $JOURNAL_PATH.")
 	if !i.flags.Parsed() {
-		i.flags.Parse(subcommandArgs)
+		if err := i.flags.Parse(subcommandArgs); err != nil {
+			return err
+		}
 	}
 	if *outputPath == "." {
 		*outputPath = "Index.md"
 	}
 	index, err := tagMap(i.options.JournalPath)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
+		return err
 	}
 	keys := sortedTagKeys(index)
 	var newIndex string
@@ -95,9 +95,5 @@ func (i *IndexCommand) Run(ctx context.Context, subcommandArgs []string) {
 		newIndex += strings.Join(mappedEntries, ", ")
 	}
 	indexPath := fmt.Sprintf("%s/%s", i.options.JournalPath, path.Base(*outputPath))
-	err = ioutil.WriteFile(indexPath, []byte(newIndex), 0644)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(3)
-	}
+	return ioutil.WriteFile(indexPath, []byte(newIndex), 0644)
 }

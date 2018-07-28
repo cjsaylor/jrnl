@@ -1,4 +1,4 @@
-# jrnl
+# jrnl [![](https://drone.chris-saylor.com/api/badges/cjsaylor/jrnl/status.svg)](https://drone.chris-saylor.com/cjsaylor/jrnl)
 
 A quick and easy CLI journaling tool that uses Github Wiki repos for organizing journal entries.
 

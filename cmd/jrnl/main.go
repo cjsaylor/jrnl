@@ -66,7 +66,10 @@ func init() {
 func fromCommandName(name string) (commands.CommandRunner, error) {
 	switch name {
 	case "open":
-		return commands.NewOpenCommand(config), nil
+		return commands.NewOpenCommand(
+			config,
+			&commands.FileProducer{},
+			&commands.ExternalEditorImpl{}), nil
 	case "memorize":
 		return commands.NewMemorizeCommand(config), nil
 	case "sync":

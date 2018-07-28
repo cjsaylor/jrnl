@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -11,17 +12,56 @@ import (
 )
 
 type OpenCommand struct {
-	options Configuration
-	flags   *flag.FlagSet
+	options       Configuration
+	flags         *flag.FlagSet
+	fileProducer  EntryProducer
+	editorSpawner ExternalEditor
+}
+
+type EntryProducer interface {
+	EnsureDirectory(string)
+	InitializeEntry(path string, content []byte) error
+}
+
+type FileProducer struct{}
+
+func (f *FileProducer) EnsureDirectory(path string) {
+	os.MkdirAll(path, os.ModePerm)
+}
+
+func (f *FileProducer) InitializeEntry(path string, content []byte) error {
+	return ioutil.WriteFile(path, content, 0644)
+}
+
+type ExternalEditor interface {
+	OpenEditor(editor string, args ...string) error
+}
+
+type ExternalEditorImpl struct{}
+
+func (e *ExternalEditorImpl) OpenEditor(editor string, args ...string) error {
+	cmd := exec.Command(editor, args...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
 }
 
 // NewOpenCommand creates a new command runner for open command
-func NewOpenCommand(config Configuration) *OpenCommand {
+func NewOpenCommand(config Configuration, fileProducer EntryProducer, editorSpawner ExternalEditor) *OpenCommand {
 	openCommand := OpenCommand{
-		options: config,
-		flags:   flag.NewFlagSet("open", flag.ExitOnError),
+		options:       config,
+		flags:         flag.NewFlagSet("open", flag.ExitOnError),
+		fileProducer:  fileProducer,
+		editorSpawner: editorSpawner,
 	}
 	return &openCommand
+}
+
+func generateFrontmatter(ctx context.Context) ([]byte, error) {
+	entry := entryHeader{
+		Date: ctx.Value(CommandContextKey("date")).(time.Time),
+	}
+	return entry.MarshalFrontmatter()
 }
 
 // Run the open command
@@ -40,14 +80,24 @@ func (o *OpenCommand) Run(ctx context.Context, subcommandArgs []string) {
 	if editorOptions := o.options.JournalEditorOptions; editorOptions != "" {
 		options = strings.Split(editorOptions, " ")
 	}
-	options = append(options, fmt.Sprintf("%s/entries/%s.md", o.options.JournalPath, filename))
-	os.MkdirAll(o.options.JournalPath+"/entries", os.ModePerm)
-	cmd := exec.Command(o.options.JournalEditor, options...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	err := cmd.Run()
+	filePath := fmt.Sprintf("%s/entries/%s.md", o.options.JournalPath, filename)
+	options = append(options, filePath)
+	o.fileProducer.EnsureDirectory(o.options.JournalPath + "/entries")
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		content, err := generateFrontmatter(ctx)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		if err = o.fileProducer.InitializeEntry(filePath, content); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(2)
+		}
+	}
+
+	err := o.editorSpawner.OpenEditor(o.options.JournalEditor, options...)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		os.Exit(3)
 	}
 }

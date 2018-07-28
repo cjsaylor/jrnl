@@ -9,8 +9,6 @@ import (
 	"sort"
 	"sync"
 	"time"
-
-	"github.com/ericaro/frontmatter"
 )
 
 type TagCommand struct {
@@ -78,7 +76,7 @@ func (t *TagCommand) Run(ctx context.Context, subcommandArgs []string) {
 		}
 		result.header.Tags = dedupe(append(result.header.Tags, tags...))
 		sort.Strings(result.header.Tags)
-		output, err := frontmatter.Marshal(result.header)
+		output, err := result.header.MarshalFrontmatter()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(3)

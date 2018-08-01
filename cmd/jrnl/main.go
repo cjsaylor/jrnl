@@ -73,7 +73,9 @@ func fromCommandName(name string) (commands.CommandRunner, error) {
 	case "memorize":
 		return commands.NewMemorizeCommand(config), nil
 	case "sync":
-		return commands.NewSyncCommand(config), nil
+		return commands.NewSyncCommand(
+			config,
+			&commands.GitCommandRunnerImpl{}), nil
 	case "index":
 		return commands.NewIndexCommand(config), nil
 	case "image":

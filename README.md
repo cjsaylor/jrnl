@@ -165,7 +165,7 @@ jrnl tag -t newtag $(jrnl find -tag existingtag | xargs -I {} echo "-f {}")
 To compile the CLI tool:
 
 ```bash
-go build -o jrnl cmd/cli/main.go
+go build -o jrnl cmd/jrnl/main.go
 ```
 
 To add a dependency use the [`dep` tool](https://github.com/golang/dep)

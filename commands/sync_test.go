@@ -21,8 +21,11 @@ func TestSyncRun(t *testing.T) {
 	runner := fakeGitCommand{
 		called: make(map[string][]string),
 	}
+	config := commands.Configuration{
+		JournalPath: "/some/path",
+	}
 	cmd := commands.NewSyncCommand(config, runner)
-	ctx = context.WithValue(context.Background(), commands.CommandContextKey("date"), time.Date(2018, time.July, 28, 0, 0, 0, 0, time.UTC))
+	ctx := context.WithValue(context.Background(), commands.CommandContextKey("date"), time.Date(2018, time.July, 28, 0, 0, 0, 0, time.UTC))
 	if err := cmd.Run(ctx, []string{}); err != nil {
 		t.Error(err)
 	}

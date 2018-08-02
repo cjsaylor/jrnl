@@ -30,7 +30,7 @@ var availableCommands = map[string]string{
 var version = "dev"
 var now time.Time
 
-func longestStringLength(strings []string) int {
+func LongestStringLength(strings []string) int {
 	length := 0
 	for _, v := range strings {
 		if len(v) > length {
@@ -53,7 +53,7 @@ func init() {
 		for key := range availableCommands {
 			keys = append(keys, key)
 		}
-		maxLength := longestStringLength(keys)
+		maxLength := LongestStringLength(keys)
 		sort.Strings(keys)
 		for _, command := range keys {
 			keyPadding := strings.Repeat(" ", maxLength+1)

@@ -10,8 +10,9 @@ import (
 )
 
 type FindCommand struct {
-	options Configuration
-	flags   *flag.FlagSet
+	options       Configuration
+	flags         *flag.FlagSet
+	consoleWriter *os.File
 }
 
 type arrayFlags []string
@@ -26,10 +27,11 @@ func (a *arrayFlags) Set(value string) error {
 }
 
 // NewFindCommand creates a new command runner for finding entries
-func NewFindCommand(config Configuration) *FindCommand {
+func NewFindCommand(config Configuration, consoleWriter *os.File) *FindCommand {
 	findCommand := FindCommand{
-		options: config,
-		flags:   flag.NewFlagSet("find", flag.ExitOnError),
+		options:       config,
+		flags:         flag.NewFlagSet("find", flag.ExitOnError),
+		consoleWriter: consoleWriter,
 	}
 	return &findCommand
 }
@@ -62,6 +64,6 @@ func (f *FindCommand) Run(ctx context.Context, subcommandArgs []string) error {
 		output = append(output, fmt.Sprintf("%s/entries/%s.md", f.options.JournalPath, key))
 	}
 	sort.Strings(output)
-	fmt.Fprintln(os.Stdout, strings.Join(output, "\n"))
+	fmt.Fprintln(f.consoleWriter, strings.Join(output, "\n"))
 	return nil
 }

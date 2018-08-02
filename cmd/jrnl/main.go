@@ -83,7 +83,7 @@ func fromCommandName(name string) (commands.CommandRunner, error) {
 	case "list-tags":
 		return commands.NewListTagsCommand(config), nil
 	case "find":
-		return commands.NewFindCommand(config), nil
+		return commands.NewFindCommand(config, os.Stdout), nil
 	case "tag":
 		return commands.NewTagCommand(config), nil
 	default:

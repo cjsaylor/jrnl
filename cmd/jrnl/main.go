@@ -65,7 +65,7 @@ func init() {
 	now = time.Now()
 }
 
-func fromCommandName(name string) (commands.CommandRunner, error) {
+func FromCommandName(name string) (commands.CommandRunner, error) {
 	switch name {
 	case "open":
 		return commands.NewOpenCommand(
@@ -121,7 +121,7 @@ func main() {
 		command = commandArgs[0]
 		commandArgs = commandArgs[1:]
 	}
-	cmd, err := fromCommandName(command)
+	cmd, err := FromCommandName(command)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

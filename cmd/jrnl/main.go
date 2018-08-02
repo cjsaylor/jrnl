@@ -68,7 +68,6 @@ func fromCommandName(name string) (commands.CommandRunner, error) {
 	case "open":
 		return commands.NewOpenCommand(
 			config,
-			&commands.FileProducer{},
 			&commands.ExternalEditorImpl{}), nil
 	case "memorize":
 		return commands.NewMemorizeCommand(config), nil

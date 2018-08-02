@@ -14,23 +14,7 @@ import (
 type OpenCommand struct {
 	options       Configuration
 	flags         *flag.FlagSet
-	fileProducer  EntryProducer
 	editorSpawner ExternalEditor
-}
-
-type EntryProducer interface {
-	EnsureDirectory(string)
-	InitializeEntry(path string, content []byte) error
-}
-
-type FileProducer struct{}
-
-func (f *FileProducer) EnsureDirectory(path string) {
-	os.MkdirAll(path, os.ModePerm)
-}
-
-func (f *FileProducer) InitializeEntry(path string, content []byte) error {
-	return ioutil.WriteFile(path, content, 0644)
 }
 
 type ExternalEditor interface {
@@ -47,11 +31,10 @@ func (e *ExternalEditorImpl) OpenEditor(editor string, args ...string) error {
 }
 
 // NewOpenCommand creates a new command runner for open command
-func NewOpenCommand(config Configuration, fileProducer EntryProducer, editorSpawner ExternalEditor) *OpenCommand {
+func NewOpenCommand(config Configuration, editorSpawner ExternalEditor) *OpenCommand {
 	openCommand := OpenCommand{
 		options:       config,
 		flags:         flag.NewFlagSet("open", flag.ExitOnError),
-		fileProducer:  fileProducer,
 		editorSpawner: editorSpawner,
 	}
 	return &openCommand
@@ -84,13 +67,13 @@ func (o *OpenCommand) Run(ctx context.Context, subcommandArgs []string) error {
 	}
 	filePath := fmt.Sprintf("%s/entries/%s.md", o.options.JournalPath, filename)
 	options = append(options, filePath)
-	o.fileProducer.EnsureDirectory(o.options.JournalPath + "/entries")
+	os.MkdirAll(o.options.JournalPath+"/entries", os.ModePerm)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		content, err := generateFrontmatter(ctx)
 		if err != nil {
 			return err
 		}
-		if err = o.fileProducer.InitializeEntry(filePath, content); err != nil {
+		if err := ioutil.WriteFile(filePath, content, 0644); err != nil {
 			return err
 		}
 	}

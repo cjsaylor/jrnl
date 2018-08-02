@@ -100,8 +100,10 @@ func main() {
 		fmt.Println(version)
 		os.Exit(0)
 	}
-
-	parsedDate, err := time.Parse("2006-01-02", *dateInput)
+	parsedDate, err := time.ParseInLocation(
+		"2006-01-02 15:04:05",
+		fmt.Sprintf("%v %v", *dateInput, now.Format("15:04:05")),
+		now.Local().Location())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to parse date: %v. Must be in form of YYYY-mm-dd", *dateInput)
 		os.Exit(1)

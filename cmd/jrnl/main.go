@@ -93,7 +93,6 @@ func FromCommandName(name string) (commands.CommandRunner, error) {
 }
 
 func main() {
-	now := time.Now()
 	dateInput := flag.String("date", now.Format("2006-01-02"), "Specify the date of entry.")
 	versionRequested := flag.Bool("version", false, "Prints the current version.")
 	flag.Parse()

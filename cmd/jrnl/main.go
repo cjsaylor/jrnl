@@ -28,6 +28,7 @@ var availableCommands = map[string]string{
 }
 
 var version = "dev"
+var now time.Time
 
 func longestStringLength(strings []string) int {
 	length := 0
@@ -61,6 +62,7 @@ func init() {
 		fmt.Fprintf(os.Stderr, "\nOptions:\n")
 		flag.PrintDefaults()
 	}
+	now = time.Now()
 }
 
 func fromCommandName(name string) (commands.CommandRunner, error) {

@@ -11,11 +11,7 @@ import (
 	"time"
 )
 
-var appendTemplate = `
-
----
-
-![](bin/%s)`
+var appendTemplate = "\n\n---\n\n![](bin/%s)\n"
 
 type ImageCommand struct {
 	options Configuration

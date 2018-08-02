@@ -168,6 +168,12 @@ To compile the CLI tool:
 go build -o jrnl cmd/jrnl/main.go
 ```
 
+To run the unit tests:
+
+```bash
+go test $(go list ./... | grep -v /vendor/)
+```
+
 To add a dependency use the [`dep` tool](https://github.com/golang/dep)
 
 For distribution, the [`goreleaser` tool](https://goreleaser.com/) is used. Simply run `goreleaser` to tag and distribute.

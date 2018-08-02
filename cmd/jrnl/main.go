@@ -28,6 +28,7 @@ var availableCommands = map[string]string{
 }
 
 var version = "dev"
+
 var now time.Time
 
 func LongestStringLength(strings []string) int {
@@ -92,6 +93,13 @@ func FromCommandName(name string) (commands.CommandRunner, error) {
 	}
 }
 
+func ParseDate(input string) (time.Time, error) {
+	return time.ParseInLocation(
+		"2006-01-02 15:04:05",
+		fmt.Sprintf("%v %v", input, now.Format("15:04:05")),
+		now.Location())
+}
+
 func main() {
 	dateInput := flag.String("date", now.Format("2006-01-02"), "Specify the date of entry.")
 	versionRequested := flag.Bool("version", false, "Prints the current version.")
@@ -101,10 +109,7 @@ func main() {
 		fmt.Println(version)
 		os.Exit(0)
 	}
-	parsedDate, err := time.ParseInLocation(
-		"2006-01-02 15:04:05",
-		fmt.Sprintf("%v %v", *dateInput, now.Format("15:04:05")),
-		now.Local().Location())
+	parsedDate, err := ParseDate(*dateInput)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to parse date: %v. Must be in form of YYYY-mm-dd", *dateInput)
 		os.Exit(1)

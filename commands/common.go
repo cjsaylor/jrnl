@@ -61,9 +61,13 @@ func unmarshalFrontmatter(input []byte) (*entryHeader, error) {
 	}
 	raw := new(rawHeader)
 	frontmatter.Unmarshal(input, raw)
-	date, err := time.Parse(JournalTimeformat, raw.Date)
-	if err != nil {
-		return nil, err
+	var date time.Time
+	var err error
+	if raw.Date != "" {
+		date, err = time.Parse(JournalTimeformat, raw.Date)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return &entryHeader{
 		Tags:    raw.Tags,

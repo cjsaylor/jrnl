@@ -30,6 +30,13 @@ func TestParseDate(t *testing.T) {
 			output, err := ParseDate(testInput.input)
 			if err != nil && !testInput.expectsError {
 				t.Fatal(err)
+			} else if err == nil && testInput.expectsError {
+				t.Error("Expected input to produce an error")
+			} else if err != nil && testInput.expectsError {
+				return
+			}
+			if err != nil && !testInput.expectsError {
+				t.Fatal(err)
 			}
 			if err == nil && testInput.expectsError {
 				t.Error("Expected input to produce an error")

@@ -28,7 +28,6 @@ var availableCommands = map[string]string{
 }
 
 var version = "dev"
-
 var now time.Time
 
 func LongestStringLength(strings []string) int {

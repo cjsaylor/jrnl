@@ -6,5 +6,5 @@ pipeline:
   test:
     image: cjsaylor/go-alpine-sdk:1.10
     commands:
-      - go get -u golang.org/x/tools/cmd/cover
-      - go test -cover $(go list ./... | grep -v /vendor/)
+      - GO111MODULE=on go get -u golang.org/x/tools/cmd/cover
+      - GO111MODULE=on go test -cover $(go list ./... | grep -v /vendor/)

@@ -1,4 +1,4 @@
-# jrnl [![](https://drone.chris-saylor.com/api/badges/cjsaylor/jrnl/status.svg)](https://drone.chris-saylor.com/cjsaylor/jrnl)
+# jrnl ![](https://github.com/cjsaylor/jrnl/workflows/.github/workflows/test.yml/badge.svg)
 
 A quick and easy CLI journaling tool that uses Github Wiki repos for organizing journal entries.
 
@@ -176,4 +176,4 @@ go test $(go list ./... | grep -v /vendor/)
 
 To add a dependency use [`go modules`](https://blog.golang.org/using-go-modules)
 
-For distribution, the [`goreleaser` tool](https://goreleaser.com/) is used. Simply run `goreleaser` to tag and distribute.
+For distribution, the [`goreleaser` tool](https://goreleaser.com/) is used. Tag a new version and run `goreleaser --rm-dist` to tag and distribute.

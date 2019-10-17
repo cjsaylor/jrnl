@@ -174,6 +174,6 @@ To run the unit tests:
 go test $(go list ./... | grep -v /vendor/)
 ```
 
-To add a dependency use the [`dep` tool](https://github.com/golang/dep)
+To add a dependency use [`go modules`](https://blog.golang.org/using-go-modules)
 
 For distribution, the [`goreleaser` tool](https://goreleaser.com/) is used. Simply run `goreleaser` to tag and distribute.

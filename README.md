@@ -1,4 +1,4 @@
-# jrnl ![](https://github.com/cjsaylor/jrnl/workflows/.github/workflows/test.yml/badge.svg)
+# jrnl [![Test Application Status](https://github.com/cjsaylor/jrnl/workflows/Test%20Application/badge.svg)](https://github.com/cjsaylor/jrnl/actions)
 
 A quick and easy CLI journaling tool that uses Github Wiki repos for organizing journal entries.
 

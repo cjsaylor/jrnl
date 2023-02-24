@@ -1,4 +1,4 @@
-# github.com/caarlos0/env v0.0.0-20170430215205-7110c4e2f569
+# github.com/caarlos0/env v3.5.0+incompatible
 github.com/caarlos0/env
 # github.com/ericaro/frontmatter v0.0.0-20141225210444-9fedef9406e4
 github.com/ericaro/frontmatter
